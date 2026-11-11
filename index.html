@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Header Analyzer — Offline Email Header Inspector</title>
+  <meta name="description" content="Free email header analyzer that runs entirely in your browser. Paste raw headers or an .eml file to see the Received chain with delays, SPF, DKIM, DMARC and ARC results, mismatched sender domains and red flags. Your headers never leave your browser.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://headers.hbenali.ovh/">
+
+  <!-- Security (static hosting: no custom HTTP headers, so CSP/referrer are set here; X-Frame-Options/X-Content-Type-Options need a real header and aren't achievable via meta).
+       connect-src 'none': this page makes no network request at all. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Email Header Analyzer — Offline Email Header Inspector">
+  <meta property="og:description" content="Paste email headers and see the delivery path, authentication results and red flags. Runs entirely in your browser: nothing is uploaded.">
+  <meta property="og:url" content="https://headers.hbenali.ovh/">
+  <meta property="og:site_name" content="Email Header Analyzer">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="https://headers.hbenali.ovh/favicon.svg">
+  <meta property="og:image:type" content="image/svg+xml">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Email Header Analyzer — Offline Email Header Inspector">
+  <meta name="twitter:description" content="Paste email headers and see the delivery path, authentication results and red flags. Runs entirely in your browser: nothing is uploaded.">
+  <meta name="twitter:image" content="https://headers.hbenali.ovh/favicon.svg">
+
+  <!-- SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0c1218" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f4efe4" media="(prefers-color-scheme: light)">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Header Analyzer">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "url": "https://headers.hbenali.ovh/",
+        "name": "Email Header Analyzer",
+        "description": "Free, offline email header analyzer: Received chain, SPF, DKIM, DMARC, ARC and red flags."
+      },
+      {
+        "@type": "WebApplication",
+        "name": "Email Header Analyzer",
+        "url": "https://headers.hbenali.ovh/",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Any",
+        "description": "Paste raw email headers or an .eml file and analyze the delivery path, delays, authentication results and spoofing red flags entirely in your browser.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preload" href="/fonts/big-shoulders-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/newsreader-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/site.css">
+</head>
+
+<body>
+<a class="skip" href="#headerInput">Skip to the tool</a>
+<header class="hero">
+  <div class="wrap">
+    <h1 class="display">
+      <span class="line"><span>Headers</span></span>
+      <span class="line"><span>read the trail</span></span>
+    </h1>
+    <p class="lead">Paste an email's raw headers and see <strong>where it came from</strong>, whether it was authenticated, and what looks wrong. <strong>Your headers never leave your browser.</strong></p>
+  </div>
+</header>
+
+<main>
+  <section class="block wrap" aria-labelledby="toolTitle">
+    <h2 class="block-title" id="toolTitle">Analyze email headers</h2>
+    <p class="block-note">This page makes no network call at all (its security policy is <code>connect-src 'none'</code>): parsing happens in your browser, so private headers stay private. For the same reason it cannot look up DNS, so it reads the SPF, DKIM and DMARC results already written into the headers and does not re-verify them.</p>
+
+    <div class="field">
+      <label for="headerInput">
+        <span>Raw headers or a whole message</span>
+        <i>how to find them: in your mail client, "Show original" or "View source"</i>
+      </label>
+      <textarea id="headerInput" class="hdr-input" rows="12" placeholder="Received: from mail.example.org ...&#10;From: ...&#10;Subject: ..." spellcheck="false" autocomplete="off" autocapitalize="off" wrap="off"></textarea>
+    </div>
+
+    <div class="actions tool-actions">
+      <button class="btn" id="analyzeBtn" type="button">Analyze headers</button>
+      <label class="btn quiet filebtn" for="fileInput">Open .eml file<input type="file" class="sr-only" id="fileInput" accept=".eml,.txt,.msg,message/rfc822,text/plain"></label>
+      <button class="btn quiet" id="sampleGoodBtn" type="button">Load SAMPLE: clean newsletter</button>
+      <button class="btn quiet" id="sampleBadBtn" type="button">Load SAMPLE: suspicious and malformed</button>
+      <button class="btn quiet" id="clearBtn" type="button">Clear</button>
+    </div>
+    <p class="hint-line">The two SAMPLE buttons load invented headers (example.org, example.net, example.com, documentation IP ranges) so you can see what a result looks like. They are not real messages. Ctrl+Enter also analyzes.</p>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+
+    <div class="result-area" id="results" aria-live="polite" hidden></div>
+  </section>
+
+  <section class="block wrap" aria-labelledby="limitsTitle">
+    <h2 class="block-title" id="limitsTitle">What this can and cannot tell you</h2>
+    <ul class="notes">
+      <li><strong>It reads, it does not verify.</strong> SPF, DKIM and DMARC results come from the Authentication-Results and Received-SPF lines. Only trust them if they were added by your own mail provider: a sender can forge such lines before delivery.</li>
+      <li><strong>Only the top of the chain is trustworthy.</strong> Each server adds a Received line above the previous ones, so the oldest hops (near the sender) are the easiest to fake.</li>
+      <li><strong>Heuristics, not verdicts.</strong> Mailing services, forwarders and mailing lists legitimately trigger several flags (different Return-Path, Reply-To on another domain, failed SPF after forwarding).</li>
+      <li><strong>Domain matching is approximate.</strong> Without the Public Suffix List offline, "same organisation" uses the last two labels (three for common cases like co.uk).</li>
+    </ul>
+  </section>
+</main>
+
+<div class="foot">
+  <footer>
+    <span><strong>100% offline analysis</strong>, no upload, no tracking</span>
+    <span>Received chain, SPF, DKIM, DMARC, ARC</span>
+    <a href="https://hbenali.ovh" target="_blank" rel="noopener noreferrer">hbenali.ovh</a>
+  </footer>
+</div>
+
+<script src="/app.js" defer></script>
+</body>
+</html>

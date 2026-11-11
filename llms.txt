@@ -1,0 +1,8 @@
+# Email Header Analyzer
+
+> Free, single-page tool that analyzes raw email headers (or a whole .eml) entirely in the browser, with no network request.
+
+Static site (no backend, no build step, no dependencies) at https://headers.hbenali.ovh. Unfolds headers, reconstructs the Received chain oldest first with per-hop delays and clock-skew flags, reads Authentication-Results, Received-SPF, DKIM-Signature and ARC headers, compares From / Return-Path / Reply-To domains, shows spam and list headers, and gives a plain-English authentication summary. Headers never leave the browser (CSP connect-src 'none'). It reads recorded results; it cannot re-verify SPF, DKIM or DMARC because that needs DNS.
+
+## Pages
+- [Email Header Analyzer](https://headers.hbenali.ovh/): the tool itself.
