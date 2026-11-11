@@ -154,7 +154,7 @@
       var m = /<([^<>]*)>/.exec(nc);
       if (m) {
         addr = m[1].trim();
-        name = collapse(nc.replace(/<[^<>]*>/g, '').replace(/[<>]/g, '')).replace(/^"(.*)"$/, '$1').replace(/\\(.)/g, '$1');
+        name = collapse(nc.slice(0, m.index) + ' ' + nc.slice(m.index + m[0].length)).split('<').join('').split('>').join('').replace(/^"(.*)"$/, '$1').replace(/\\(.)/g, '$1'); // display name = the text around the address, with no angle brackets left
       } else {
         var bare = collapse(nc);
         var b = /([^\s<>"]+@[^\s<>"]+)/.exec(bare);
