@@ -4,7 +4,7 @@
 (function () {
   'use strict';
 
-  var MAX_INPUT = 2 * 1024 * 1024; // characters analysed (headers only; the body is ignored)
+  var MAX_INPUT = 2 * 1024 * 1024; // characters analyzed (headers only; the body is ignored)
 
   // ------------------------------------------------------------------ parsing helpers
 
@@ -393,7 +393,7 @@
       if (r.delay !== null) {
         if (r.delay < 0) flag(r.delay <= -60 ? 'fail' : 'warn', 'Hop ' + n + ' is stamped ' + fmtDuration(-r.delay) + ' BEFORE hop ' + (n - 1) + ': negative delay, so a server clock is wrong (clock skew) or a header was forged or inserted.', 'path');
         else if (r.delay >= 86400) flag('fail', 'Hop ' + n + ' came ' + fmtDuration(r.delay) + ' after hop ' + (n - 1) + ': a very large delay (queued, deferred or greylisted, or a clock problem).', 'path');
-        else if (r.delay >= 3600) flag('warn', 'Hop ' + n + ' came ' + fmtDuration(r.delay) + ' after hop ' + (n - 1) + ': a large delay (queueing or retries).', 'path');
+        else if (r.delay >= 3600) flag('warn', 'Hop ' + n + ' came ' + fmtDuration(r.delay) + ' after hop ' + (n - 1) + ': a large delay (queuing or retries).', 'path');
       }
     });
     var dated = chain.filter(function (r) { return r.date; });
@@ -431,7 +431,7 @@
     res.dkim = dk;
     dk.forEach(function (d) { d.flags.forEach(function (f) { flag(f.sev, f.msg, 'dkim'); }); });
     arcAr.flags.forEach(function (f) { flag(f.sev, f.msg, 'arc'); });
-    if (dk.length && fromDomain && !dk.some(function (d) { return d.aligned && d.fromSigned; })) flag('warn', 'None of the DKIM signatures is made by the From domain (' + fromDomain + ') or its organisational domain, so DKIM alone gives no DMARC alignment.', 'dkim');
+    if (dk.length && fromDomain && !dk.some(function (d) { return d.aligned && d.fromSigned; })) flag('warn', 'None of the DKIM signatures is made by the From domain (' + fromDomain + ') or its organizational domain, so DKIM alone gives no DMARC alignment.', 'dkim');
     if (!dk.length) flag('info', 'The message carries no DKIM-Signature header.', 'dkim');
 
     var spfRes = spf ? spf.items[0].result : (rspf.length ? rspf[0].result : null);
@@ -444,7 +444,7 @@
     res.verdict = { spf: spfRes, dkim: dkimResAny, dmarc: dmarcRes, arc: arcRes, spfPass: spfPass, dkimPass: dkimPass, dmarcPass: dmarcPass };
 
     if (!ars.length && !rspf.length) flag('info', 'No Authentication-Results or Received-SPF header: the receiving server did not record SPF/DKIM/DMARC outcomes (or they were removed), so nothing here shows the sender was verified.', 'auth');
-    if (spfRes && ['fail', 'softfail', 'permerror', 'temperror'].indexOf(spfRes) >= 0) flag(spfRes === 'softfail' ? 'warn' : 'fail', 'SPF result is "' + spfRes + '": the sending server is not (clearly) authorised by the envelope domain.', 'auth');
+    if (spfRes && ['fail', 'softfail', 'permerror', 'temperror'].indexOf(spfRes) >= 0) flag(spfRes === 'softfail' ? 'warn' : 'fail', 'SPF result is "' + spfRes + '": the sending server is not (clearly) authorized by the envelope domain.', 'auth');
     else if (spfRes === 'none' || spfRes === 'neutral') flag('warn', 'SPF result is "' + spfRes + '": the domain makes no assertion about this server.', 'auth');
     dkimResAny.forEach(function (r, i) { if (['fail', 'permerror', 'temperror', 'policy'].indexOf(r) >= 0) flag('fail', 'A DKIM check reported "' + r + '"' + (dkimR.items[i].props['header.d'] ? ' for ' + dkimR.items[i].props['header.d'] : '') + '.', 'auth'); });
     if (dmarcRes && !dmarcPass) {
@@ -710,12 +710,12 @@
     if (res.mismatches.length) {
       idSec.appendChild(el('h4', 'mini-title', 'Domain comparison with From (' + (res.fromDomain || '?') + ')'));
       idSec.appendChild(table(['Header', 'Domain', 'Compared with From'], res.mismatches.map(function (m) {
-        return [m.label, m.domain, m.same ? { t: m.exact ? 'same domain' : 'same organisation (approximate)', cls: 'ok-t' } : { t: m.note || 'DIFFERENT', cls: 'bad-t' }];
+        return [m.label, m.domain, m.same ? { t: m.exact ? 'same domain' : 'same organization (approximate)', cls: 'ok-t' } : { t: m.note || 'DIFFERENT', cls: 'bad-t' }];
       })));
     }
     box.appendChild(idSec);
 
-    var rc = section('Received chain, oldest first', 'Each server prepends a Received line, so a file lists the newest hop first; this table reverses it into the order the message travelled. Only the lines added by servers you trust are reliable: lines further down were written earlier and can be forged by the sender.');
+    var rc = section('Received chain, oldest first', 'Each server prepends a Received line, so a file lists the newest hop first; this table reverses it into the order the message traveled. Only the lines added by servers you trust are reliable: lines further down were written earlier and can be forged by the sender.');
     if (res.chain.length) {
       rc.appendChild(table(['#', 'From (claimed, then seen)', 'By', 'With', 'Time (UTC)', 'Delay'], res.chain.map(function (r, i) {
         var from = el('div');
@@ -856,7 +856,7 @@
       var t = String(rd.result || '');
       var cut = t.search(/\r?\n\r?\n/); // keep only the header block in the box
       $('headerInput').value = (cut >= 0 ? t.slice(0, cut) : t).slice(0, MAX_INPUT);
-      setStatus('Read ' + f.name + ' locally in your browser; only its header block is analysed.');
+      setStatus('Read ' + f.name + ' locally in your browser; only its header block is analyzed.');
       run($('headerInput').value, false);
     };
     rd.onerror = function () { setStatus('Could not read that file.'); };

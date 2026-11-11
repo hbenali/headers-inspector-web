@@ -14,13 +14,13 @@ Paste raw headers (or a whole `.eml`) and read the message's trail. Everything r
 - **ARC** sets (ARC-Seal, ARC-Message-Signature, ARC-Authentication-Results) and chain validation result
 - **Spam and bulk headers**: X-Spam-Status / Score / Flag, X-Mailer, List-Unsubscribe (and one-click), SCL and others
 - **Plain-English summary** of whether the message looks authenticated, plus a list of red flags
-- Two clearly labelled **SAMPLE** buttons with invented headers (example.org, example.net, documentation IP ranges)
+- Two clearly labeled **SAMPLE** buttons with invented headers (example.org, example.net, documentation IP ranges)
 - Links to the sibling SPF / DMARC / MX / BIMI / DKIM tools for the sender domain (plain links; nothing is sent unless you click)
 - Dark editorial design with a light mode, self-hosted fonts, PWA, strict CSP (`script-src 'self'`)
 
 ## What it cannot do
 
-It reads the authentication results recorded in the headers; it cannot re-verify SPF, DKIM or DMARC because that needs DNS lookups, which the strict offline policy forbids. Treat results as trustworthy only when your own mail provider added them. Same-organisation domain matching is approximate (no Public Suffix List offline).
+It reads the authentication results recorded in the headers; it cannot re-verify SPF, DKIM or DMARC because that needs DNS lookups, which the strict offline policy forbids. Treat results as trustworthy only when your own mail provider added them. Same-organization domain matching is approximate (no Public Suffix List offline).
 
 ## Running locally
 

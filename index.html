@@ -120,7 +120,7 @@
       <li><strong>It reads, it does not verify.</strong> SPF, DKIM and DMARC results come from the Authentication-Results and Received-SPF lines. Only trust them if they were added by your own mail provider: a sender can forge such lines before delivery.</li>
       <li><strong>Only the top of the chain is trustworthy.</strong> Each server adds a Received line above the previous ones, so the oldest hops (near the sender) are the easiest to fake.</li>
       <li><strong>Heuristics, not verdicts.</strong> Mailing services, forwarders and mailing lists legitimately trigger several flags (different Return-Path, Reply-To on another domain, failed SPF after forwarding).</li>
-      <li><strong>Domain matching is approximate.</strong> Without the Public Suffix List offline, "same organisation" uses the last two labels (three for common cases like co.uk).</li>
+      <li><strong>Domain matching is approximate.</strong> Without the Public Suffix List offline, "same organization" uses the last two labels (three for common cases like co.uk).</li>
     </ul>
   </section>
 </main>
