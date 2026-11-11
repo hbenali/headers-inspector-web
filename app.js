@@ -154,7 +154,7 @@
       var m = /<([^<>]*)>/.exec(nc);
       if (m) {
         addr = m[1].trim();
-        name = collapse(nc.replace(/<[^<>]*>/, '')).replace(/^"(.*)"$/, '$1').replace(/\\(.)/g, '$1');
+        name = collapse(nc.replace(/<[^<>]*>/g, '').replace(/[<>]/g, '')).replace(/^"(.*)"$/, '$1').replace(/\\(.)/g, '$1');
       } else {
         var bare = collapse(nc);
         var b = /([^\s<>"]+@[^\s<>"]+)/.exec(bare);
